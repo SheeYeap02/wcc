@@ -1,0 +1,171 @@
+<div style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+    <button (click)="logout()" nz-button nzType="default">Logout</button>
+    <a (click)="openDrawer()">View Logs</a>
+</div>
+
+<nz-spin [nzSpinning]="isDistanceLoading" nzTip="Calculating...">
+    <h3>Calculate Distance</h3>
+    <div style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+        <nz-select [(ngModel)]="selectedId1" nzShowSearch style="width: 200px" required>
+            <nz-option *ngFor="let p of postcodelatlngs" [nzValue]="p.id" [nzLabel]="p.postcode"></nz-option>
+        </nz-select>
+        <nz-select [(ngModel)]="selectedId2" nzShowSearch style="width: 200px" required>
+            <nz-option *ngFor="let p of postcodelatlngs" [nzValue]="p.id" [nzLabel]="p.postcode"></nz-option>
+        </nz-select>
+        <div class="form-bottom">
+            <button nz-button nzType="primary" class="account-btn" type="submit" (click)="calculateDistance()">Calculate Distance</button>
+        </div>
+    </div>
+    
+    <div *ngIf="postcodeDistance" style="margin-bottom: 20px;">
+        <nz-table
+          #distanceTable
+          [nzData]="formattedDistanceData"
+          [nzLoading]="isDistanceLoading"
+        >
+          <thead>
+            <tr>
+              <th nzWidth="10%">No.</th>
+              <th nzWidth="30%">Postcode</th>
+              <th nzWidth="30%">Latitude</th>
+              <th nzWidth="30%">Longitude</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of distanceTable.data; let i = index">
+                <ng-container *ngIf="i < 2">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ row.postcode }}</td>
+                    <td>{{ row.latitude }}</td>
+                    <td>{{ row.longitude }}</td>
+                </ng-container>
+          
+                <td *ngIf="i === 2" [attr.colspan]="4" class="distance-cell">
+                  {{ row.postcode }}
+                </td>
+            </tr>
+          </tbody>
+        </nz-table>
+        <div style="margin-bottom: 10px;">
+            <button *ngIf="postcodeDistance" (click)="downloadJson()">Download as JSON</button>
+        </div>
+    </div>
+</nz-spin>
+
+
+<div style="padding-top: 30px; margin-bottom: 30px;">
+    <div style="margin-bottom: 10px; display: flex; justify-content: space-between;">
+        <h3>All Location Records</h3>
+        <button (click)="onReset()" nz-button nzType="default">Reset</button>
+    </div>
+    <nz-table
+      #postcodeTable
+      [nzData]="postcodelatlngs"
+      [nzPageSize]="10"
+      [nzTotal]="totalCount"
+      [nzPageIndex]="(searchModel.offset / searchModel.maxResult) + 1"
+      (nzPageIndexChange)="onPageChange($event)"
+      (nzPageSizeChange)="onPageSizeChange($event)"
+      nzShowSizeChanger
+      [nzFrontPagination]="false"
+      (nzQueryParams)="onQueryParamsChange($event)"
+      [nzLoading]="isLoading"
+    >
+      <thead nzSingleSort>
+        <tr>
+          <th nzWidth="10%" [nzSortFn]="true" nzColumnKey="id">Id</th>
+          <th nzWidth="30%" [nzSortFn]="true" nzColumnKey="postcode">Postcode</th>
+          <th nzWidth="30%" [nzSortFn]="true" nzColumnKey="latitude">Latitude</th>
+          <th nzWidth="30%" [nzSortFn]="true" nzColumnKey="longitude">Longitude</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of postcodeTable.data">
+          <td><a (click)="showModal(item)">{{ item.id }}</a></td>
+          <td>{{ item.postcode }}</td>
+          <td>{{ item.latitude }}</td>
+          <td>{{ item.longitude }}</td>
+        </tr>
+      </tbody>
+    </nz-table>
+</div>
+
+<nz-modal [(nzVisible)]="isVisible" nzTitle="Update Postcode Info" (nzOnCancel)="closeModal()">
+    <div *nzModalContent>
+        <form nz-form [formGroup]="updatePostcodeForm">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="6" nzRequired>ID</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <input nz-input formControlName="id">
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzRequired>Postcode</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                  <input nz-input formControlName="postcode">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzRequired>Latitude</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                  <input nz-input formControlName="latitude">
+                </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+                <nz-form-label [nzSpan]="6" nzRequired>Longitude</nz-form-label>
+                <nz-form-control [nzSpan]="14">
+                  <input nz-input formControlName="longitude">
+                </nz-form-control>
+            </nz-form-item>
+        </form>
+    </div>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="closeModal()">Close</button>
+      <button nz-button nzType="primary" (click)="updatePostcodelatlng()" [nzLoading]="isConfirmLoading">Update</button>
+    </div>
+</nz-modal>
+
+
+<nz-drawer
+  [nzClosable]="false"
+  [nzVisible]="drawerVisible"
+  [nzTitle]="'Location Distance Calculation Logs'"
+  [nzWidth]="900"
+  (nzOnClose)="closeDrawer()"
+>
+<ng-container *nzDrawerContent>
+    <button (click)="onReset(true)" nz-button nzType="default" style="float: right; margin-bottom: 20px;">Reset</button>
+    <nz-table #logsTable
+                [nzData]="postcodeDistanceLogs"
+                [nzPageSize]="10"
+                [nzTotal]="totalLogs"
+                [nzPageIndex]="(logsSearchModel.offset / logsSearchModel.maxResult) + 1"
+                (nzPageIndexChange)="onPageChange($event, true)"
+                (nzPageSizeChange)="onPageSizeChange($event, true)"
+                nzShowSizeChanger
+                [nzFrontPagination]="false"
+                (nzQueryParams)="onQueryParamsChange($event, true)"
+                [nzLoading]="isLogsLoading">
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>Postcode</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th [nzSortFn]="true" nzColumnKey="distance">Distance</th>
+            <th [nzSortFn]="true" nzColumnKey="updateDate">Update Date</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of logsTable.data; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ item.firstLocation.postcode }}<br>{{ item.secondLocation.postcode }}</td>
+            <td>{{ item.firstLocation.latitude }}<br>{{ item.secondLocation.latitude }}</td>
+            <td>{{ item.firstLocation.longitude }}<br>{{ item.secondLocation.longitude }}</td>
+            <td>{{ item.distance }}</td>
+            <td>{{ item.updateDate }}</td>
+          </tr>
+        </tbody>
+      </nz-table>
+</ng-container>
+</nz-drawer>

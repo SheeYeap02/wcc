@@ -1,0 +1,25 @@
+.account-btn {
+  background-color: #012c5d;
+  color: #fff;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  padding: 0 16px;
+  height: 46px;
+  line-height: 42px !important;
+  font-size: 12px;
+  border-radius: 8px;
+  border: 1px solid #012c5d;
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition-duration: 0.4s;
+  margin: 0 auto;
+}
+.account-btn:hover {
+  box-shadow: 0 3px 8px 0 rgba(1, 44, 99, 0.5);
+}
+.distance-cell {
+  text-align: center;
+  font-weight: bold;
+  font-size: 1.2em;
+}

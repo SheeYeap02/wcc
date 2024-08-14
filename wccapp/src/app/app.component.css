@@ -1,0 +1,48 @@
+body {
+  font-family: Open Sans, SF Pro Text, -apple-system, BlinkMacSystemFont, Arial, Helvetica, Roboto, sans-serif;
+}
+nz-layout {
+  position: relative;
+}
+nz-header {
+  background-color: white !important;
+  border-bottom: 3px solid #bd2e26;
+}
+nz-footer {
+  background-color: #111;
+  color: #adadad;
+  font-size: small;
+}
+.link-wrapper {
+  margin: 10px 0;
+  display: inline;
+  text-align: left;
+}
+.link-wrapper a {
+  color: white;
+  padding: 8px 15px;
+  font-weight: bold;
+}
+.link-wrapper a:hover {
+  text-decoration: underline;
+}
+.footer-bottom {
+  margin-top: 20px;
+}
+.footer-bottom .social-media-wrap {
+  padding-left: 25px;
+}
+.footer-bottom .social-media-wrap h5 {
+  color: #adadad;
+  font-size: small;
+}
+.footer-bottom .social-media-wrap .social-media-section {
+  margin-right: 15px;
+}
+.footer-bottom .social-media-wrap .social-media-section a {
+  padding-right: 15px;
+}
+.footer-bottom .social-media-wrap .social-media-section a img {
+  width: 30px;
+  height: 30px;
+}

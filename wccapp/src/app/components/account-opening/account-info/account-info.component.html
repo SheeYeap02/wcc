@@ -1,0 +1,204 @@
+<div class="loading-overlay" *ngIf="loading"></div>
+
+<div class="container">
+  <div class="form-switch">
+    <a (click)="showLoginPanel = !showLoginPanel" class="toggle-link">
+      {{ showLoginPanel ? 'Switch to Register' : 'Switch to Login' }}
+    </a>
+  </div>
+
+  <div *ngIf="showLoginPanel; else registerForm">
+    <!-- Login Panel -->
+    <div class="login-panel">
+      <div class="title-wrapper">
+        <h4>Account Login</h4>
+        <p>Login to your account in few seconds - all online, hassle free.</p>
+      </div>
+
+      <div class="form-wrapper">
+        <form nz-form [formGroup]="loginForm" (ngSubmit)="onLogin()">
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>User ID</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+              <input nz-input formControlName="userId" placeholder="User ID" required>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="6" nzRequired>Password</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+              <input nz-input type="password" formControlName="password" placeholder="Password" required>
+            </nz-form-control>
+          </nz-form-item>
+          <div class="form-bottom">
+            <button nz-button nzType="primary" class="account-btn" type="submit">Login</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #registerForm>
+    <!-- Registration Panel -->
+    <div class="register-panel">
+      <div class="title-wrapper">
+        <h4>Account Opening</h4>
+        <p>Open an account in few minutes - all online, hassle free.</p>
+      </div>
+
+      <div class="form-wrapper">
+        <form nz-form [nzAutoTips]="autoTips" [formGroup]="form" #addForm="ngForm" (ngSubmit)="onAddAccountInfo(addForm)">
+          <!-- Personal Information -->
+          <h4>Personal Information</h4>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzRequired>Nationality</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+              <nz-select formControlName="nationality" (ngModelChange)="onNationalityChange()" nzShowSearch>
+                <nz-option *ngFor="let p of countryData" [nzValue]="p" [nzLabel]="p"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <ng-container *ngIf="form.get('nationality').value !== 'Malaysian'">
+            <nz-form-item>
+              <nz-form-label [nzSpan]="5" nzRequired>Passport Number</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <input nz-input formControlName="passport" placeholder="Passport Number" required>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="5" nzRequired>Issuing Country/Region</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-select formControlName="issuingCountry" required nzShowSearch>
+                  <nz-option *ngFor="let country of countryData" [nzValue]="country" [nzLabel]="country"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+            <nz-form-item>
+              <nz-form-label [nzSpan]="5" nzRequired>Expiry Date</nz-form-label>
+              <nz-form-control [nzSpan]="14">
+                <nz-date-picker nzFormat="yyyy-MM-dd" formControlName="expiryDate"
+                                nzPlaceholder="Expiry Date" required></nz-date-picker>
+              </nz-form-control>
+            </nz-form-item>
+          </ng-container>
+          <nz-form-item *ngIf="form.get('nationality').value === 'Malaysian'">
+            <nz-form-label [nzSpan]="5" nzRequired>NRIC Type</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+              <nz-select formControlName="icType" required nzShowSearch>
+                <nz-option *ngFor="let c of icData[form.get('nationality').value]" [nzValue]="c" [nzLabel]="c"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item *ngIf="form.get('nationality').value === 'Malaysian'">
+            <nz-form-label [nzSpan]="5" nzRequired>NRIC</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+              <input nz-input formControlName="icNo" placeholder="NRIC" required>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzRequired>Salutation</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+              <nz-select formControlName="salutation" required nzShowSearch>
+                <nz-option *ngFor="let salutation of salutationData" [nzValue]="salutation"
+                           [nzLabel]="salutation"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzRequired>Full Name</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+              <input nz-input formControlName="fullName" placeholder="Full name as per NRIC" required>
+            </nz-form-control>
+          </nz-form-item>
+
+          <!-- Login Information -->
+          <h4>Login Information</h4>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzRequired>User ID</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+              <input nz-input formControlName="userId" placeholder="User ID" required>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzRequired>Password</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzDisableAutoTips nzErrorTip="Please input your password!">
+              <input nz-input type="password" formControlName="password" placeholder="Password"
+                     (ngModelChange)="checkPassword()" required>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzRequired>Confirm Password</nz-form-label>
+            <nz-form-control [nzSpan]="14" nzDisableAutoTips [nzErrorTip]="passwordErrorTpl">
+              <input nz-input type="password" formControlName="confirmPassword" placeholder="confirmPassword" required>
+            </nz-form-control>
+            <ng-template #passwordErrorTpl let-control>
+              @if (control.errors?.['required']) {
+              Please confirm your password!
+              }
+              @if (control.errors?.['confirm']) {
+              Password is inconsistent!
+              }
+            </ng-template>
+          </nz-form-item>
+          <div class="password-requirements">
+            <nz-row class="password-wrapper">
+              <nz-col nzSpan="7" nzOffset="5">
+                <span nz-icon nzType="check-circle" nzTheme="twotone"
+                      [nzTwotoneColor]="passwordRequirements['minLength'] ? '#52c41a' : 'rgb(145, 145, 145)'"></span>
+                <p [ngClass]="{ 'valid': passwordRequirements['minLength'], 'invalid': !passwordRequirements['minLength'] }">8
+                  characters minimum</p>
+              </nz-col>
+              <nz-col nzSpan="7">
+                <span nz-icon nzType="check-circle" nzTheme="twotone"
+                      [nzTwotoneColor]="passwordRequirements['uppercase'] ? '#52c41a' : 'rgb(145, 145, 145)'"></span>
+                <p [ngClass]="{ 'valid': passwordRequirements['uppercase'], 'invalid': !passwordRequirements['uppercase'] }">
+                  At least one uppercase letter</p>
+              </nz-col>
+              <nz-col nzSpan="7" nzOffset="5">
+                <span nz-icon nzType="check-circle" nzTheme="twotone"
+                      [nzTwotoneColor]="passwordRequirements['lowercase'] ? '#52c41a' : 'rgb(145, 145, 145)'"></span>
+                <p [ngClass]="{ 'valid': passwordRequirements['lowercase'], 'invalid': !passwordRequirements['lowercase'] }">
+                  At least one lowercase letter</p>
+              </nz-col>
+              <nz-col nzSpan="7">
+                <span nz-icon nzType="check-circle" nzTheme="twotone"
+                      [nzTwotoneColor]="passwordRequirements['number'] ? '#52c41a' : 'rgb(145, 145, 145)'"></span>
+                <p [ngClass]="{ 'valid': passwordRequirements['number'], 'invalid': !passwordRequirements['number'] }">At
+                  least one number</p>
+              </nz-col>
+            </nz-row>
+          </div>
+
+          <!-- Contact Information -->
+          <h4>Contact Information</h4>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzRequired>Mobile Number</nz-form-label>
+            <nz-form-control [nzSpan]="6">
+              <nz-select formControlName="dialingCode" required nzShowSearch>
+                <nz-option *ngFor="let code of dialingCodeData" [nzValue]="code.value" [nzLabel]="code.label"></nz-option>
+              </nz-select>
+            </nz-form-control>
+            <nz-form-control [nzSpan]="8">
+              <input nz-input formControlName="phoneNo" placeholder="Mobile Number" required>
+            </nz-form-control>
+          </nz-form-item>
+          <nz-form-item>
+            <nz-form-label [nzSpan]="5" nzRequired>Email Address</nz-form-label>
+            <nz-form-control [nzSpan]="14">
+              <input nz-input formControlName="email" placeholder="Email Address" type="email" required>
+            </nz-form-control>
+          </nz-form-item>
+
+          <div class="form-bottom">
+            <p>By clicking the Register button, you acknowledge that you have read and agreed to our <span class="term">Terms and Conditions</span>
+            </p>
+            <button nz-button nzType="primary" class="account-btn" id="add-account-info" type="submit">Register</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </ng-template>
+</div>
+
+
+
+

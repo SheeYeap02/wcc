@@ -1,0 +1,26 @@
+<nz-layout class="account-layout">
+  <div nz-row class="">
+    <div nz-col nzSpan="10">
+      <div class="inner">
+        <div class="bg-image">
+
+        </div>
+        <div class="account-left">
+          <h2 class="">Account</h2>
+          <p>Step 1 of 2</p>
+          <nz-steps [nzCurrent]="currentStep" nzProgressDot nzDirection="vertical">
+            <nz-step nzTitle="Account Information"></nz-step>
+            <nz-step nzTitle="UK Postcode Distance"></nz-step>
+          </nz-steps>
+        </div>
+      </div>
+    </div>
+    <div nz-col nzSpan="14" style="padding: 3rem 4rem;">
+      <div class="account-right">
+        <router-outlet></router-outlet>
+      </div>
+    </div>
+  </div>
+  <ng-content nzTheme="light">
+  </ng-content>
+</nz-layout>

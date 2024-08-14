@@ -1,0 +1,69 @@
+.form-switch {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.toggle-link {
+  color: #1890ff;
+  font-size: 16px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.toggle-link:hover {
+  text-decoration: underline;
+}
+.form-wrapper form {
+  float: left;
+  width: 100%;
+}
+.form-wrapper form h4 {
+  font-weight: 700;
+  font-size: 15px;
+}
+.form-wrapper form .password-requirements nz-col {
+  display: flex;
+}
+.form-wrapper form .password-requirements p {
+  color: #919191;
+}
+.form-wrapper form .password-requirements span {
+  padding-top: 0.3rem;
+  padding-right: 0.5rem;
+}
+.form-wrapper form .valid {
+  color: #52c41a;
+}
+.form-wrapper form .invalid {
+  color: #919191;
+}
+.form-wrapper .form-bottom {
+  padding-top: 60px;
+}
+.form-wrapper .form-bottom p {
+  color: #7a7a7a !important;
+  width: 75%;
+}
+.form-wrapper .form-bottom p .term {
+  color: #0073cf;
+  font-weight: bold;
+  cursor: pointer;
+}
+.form-wrapper .form-bottom .account-btn {
+  background-color: #012c5d;
+  color: #fff;
+  font-weight: 700 !important;
+  text-transform: uppercase;
+  padding: 0 28px;
+  height: 46px;
+  line-height: 42px !important;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #012c5d;
+  position: relative;
+  overflow: hidden;
+  transform: translateZ(0);
+  transition-duration: 0.4s;
+  margin: 0 auto;
+}
+.form-wrapper .form-bottom .account-btn:hover {
+  box-shadow: 0 3px 8px 0 rgba(1, 44, 99, 0.5);
+}
